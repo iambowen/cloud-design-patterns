@@ -1,24 +1,29 @@
 ### 云设计模式
 
-These design patterns are useful for building reliable, scalable, secure applications in the cloud.
+这些设计模式对于在云中构建可靠，可扩展，安全的应用程序非常有用。
+书中的每个模式描述了要解决的问题，使用模式的注意事项以及基于Microsoft Azure的例子。大多数模式包括如何在Azure上实现模式的代码示例或代码段。但是，大多数模式都适用于分布式系统，和在那个云平台托管没有关系。
 
-Each pattern describes the problem that the pattern addresses, considerations for applying the pattern, and an example based on Microsoft Azure. Most of the patterns include code samples or snippets that show how to implement the pattern on Azure. However, most of the patterns are relevant to any distributed system, whether hosted on Azure or on other cloud platforms.
-Challenges in cloud development
+## 开发云上应用面临的挑战
+
+### 可用性
+可用性是系统正常工作时间的比例，通常以运行时间的百分比来衡量。它会受到系统错误，基础设施问题，恶意攻击和系统负载的影响。云应用程序通常会为用户提供服务等级协议（SLA），因此应用程序必须设计为最大限度地提高可用性。
+
+### 数据管理
+
+数据管理是云应用的关键要素，影响了大多数的质量属性。因为性能，可扩展性或可用性等原因，数据通常托管在不同的位置并跨多个服务器，这可能会带来一系列挑战。例如，必须保持数据一致性，并且数据通常需要在不同位置间同步。
+
+### 设计和实现
+
+良好的设计涵盖了如组件设计和部署中的一致性和相关性，简化管理和开发的可维护性，以及允许组件和子系统在其它应用程序和场景中的可重用性等因素。在设计和实施阶段做出的决策对托管在云商的应用程序和服务的质量、总体拥有成本产生巨大的影响。
  
-### Availability
-Availability is the proportion of time that the system is functional and working, usually measured as a percentage of uptime. It can be affected by system errors, infrastructure problems, malicious attacks, and system load. Cloud applications typically provide users with a service level agreement (SLA), so applications must be designed to maximize availability.
-   
-### Data Management
-Data management is the key element of cloud applications, and influences most of the quality attributes. Data is typically hosted in different locations and across multiple servers for reasons such as performance, scalability or availability, and this can present a range of challenges. For example, data consistency must be maintained, and data will typically need to be synchronized across different locations.
-   
-### Design and Implementation
-Good design encompasses factors such as consistency and coherence in component design and deployment, maintainability to simplify administration and development, and reusability to allow components and subsystems to be used in other applications and in other scenarios. Decisions made during the design and implementation phase have a huge impact on the quality and the total cost of ownership of cloud hosted applications and services.
- 
-### Messaging
-The distributed nature of cloud applications requires a messaging infrastructure that connects the components and services, ideally in a loosely coupled manner in order to maximize scalability. Asynchronous messaging is widely used, and provides many benefits, but also brings challenges such as the ordering of messages, poison message management, idempotency, and more
- 
-### Management and Monitoring
-Cloud applications run in in a remote datacenter where you do not have full control of the infrastructure or, in some cases, the operating system. This can make management and monitoring more difficult than an on-premises deployment. Applications must expose runtime information that administrators and operators can use to manage and monitor the system, as well as supporting changing business requirements and customization without requiring the application to be stopped or redeployed.
+### 消息
+
+云应用程序的分布式特性需要一种连接组件和服务的消息传递基础设施，理想情况下以松散耦合的方式，以便最大限度地提高可扩展性。 异步消息系统使用广泛，提供了许多好处，但也带来了诸如消息排序，[毒药消息管理](https://docs.microsoft.com/en-us/dotnet/framework/wcf/feature-details/poison-message-handling)，幂等等的挑战
+
+### 管理和监控
+
+云应用程序运行在基础设施甚至操作系统无法完全控制的远程数据中心。管理和监控比本地部署更困难。应用程序必须公开管理员和操作员可以使用的运行时信息来管理和监视系统，以及支持不断变化的业务需求和定制，而不需要停止或重新部署应用程序。
+
 Cloud Design Patterns
  
                 Catalog of patterns

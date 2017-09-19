@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>引言 · GitBook</title>
+        <title>云设计模式(Cloud Design Patterns) · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,6 +57,8 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
+    <link rel="next" href="categories.md" />
+    
     
 
     </head>
@@ -85,7 +87,7 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="./">
             
                 <a href="./">
             
@@ -111,7 +113,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.3" data-path="cloud-design-patterns.html">
+        <li class="chapter active" data-level="1.3" data-path="cloud-design-patterns.html">
             
                 <a href="cloud-design-patterns.html">
             
@@ -693,7 +695,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >引言</a>
+        <a href="." >云设计模式(Cloud Design Patterns)</a>
     </h1>
 </div>
 
@@ -708,8 +710,96 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="introduction">Introduction</h1>
-<h2 id="cloud-design-patterns"><a href="cloud-design-patterns.html">Cloud Design Patterns</a></h2>
+                                <h3 id="&#x4E91;&#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;">&#x4E91;&#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;</h3>
+<p>&#x8FD9;&#x4E9B;&#x8BBE;&#x8BA1;&#x6A21;&#x5F0F;&#x5BF9;&#x4E8E;&#x5728;&#x4E91;&#x4E2D;&#x6784;&#x5EFA;&#x53EF;&#x9760;&#xFF0C;&#x53EF;&#x6269;&#x5C55;&#xFF0C;&#x5B89;&#x5168;&#x7684;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x975E;&#x5E38;&#x6709;&#x7528;&#x3002;
+&#x4E66;&#x4E2D;&#x7684;&#x6BCF;&#x4E2A;&#x6A21;&#x5F0F;&#x63CF;&#x8FF0;&#x4E86;&#x8981;&#x89E3;&#x51B3;&#x7684;&#x95EE;&#x9898;&#xFF0C;&#x4F7F;&#x7528;&#x6A21;&#x5F0F;&#x7684;&#x6CE8;&#x610F;&#x4E8B;&#x9879;&#x4EE5;&#x53CA;&#x57FA;&#x4E8E;Microsoft Azure&#x7684;&#x4F8B;&#x5B50;&#x3002;&#x5927;&#x591A;&#x6570;&#x6A21;&#x5F0F;&#x5305;&#x62EC;&#x5982;&#x4F55;&#x5728;Azure&#x4E0A;&#x5B9E;&#x73B0;&#x6A21;&#x5F0F;&#x7684;&#x4EE3;&#x7801;&#x793A;&#x4F8B;&#x6216;&#x4EE3;&#x7801;&#x6BB5;&#x3002;&#x4F46;&#x662F;&#xFF0C;&#x5927;&#x591A;&#x6570;&#x6A21;&#x5F0F;&#x90FD;&#x9002;&#x7528;&#x4E8E;&#x5206;&#x5E03;&#x5F0F;&#x7CFB;&#x7EDF;&#xFF0C;&#x548C;&#x5728;&#x90A3;&#x4E2A;&#x4E91;&#x5E73;&#x53F0;&#x6258;&#x7BA1;&#x6CA1;&#x6709;&#x5173;&#x7CFB;&#x3002;</p>
+<h2 id="&#x5F00;&#x53D1;&#x4E91;&#x4E0A;&#x5E94;&#x7528;&#x9762;&#x4E34;&#x7684;&#x6311;&#x6218;">&#x5F00;&#x53D1;&#x4E91;&#x4E0A;&#x5E94;&#x7528;&#x9762;&#x4E34;&#x7684;&#x6311;&#x6218;</h2>
+<h3 id="&#x53EF;&#x7528;&#x6027;">&#x53EF;&#x7528;&#x6027;</h3>
+<p>&#x53EF;&#x7528;&#x6027;&#x662F;&#x7CFB;&#x7EDF;&#x6B63;&#x5E38;&#x5DE5;&#x4F5C;&#x65F6;&#x95F4;&#x7684;&#x6BD4;&#x4F8B;&#xFF0C;&#x901A;&#x5E38;&#x4EE5;&#x8FD0;&#x884C;&#x65F6;&#x95F4;&#x7684;&#x767E;&#x5206;&#x6BD4;&#x6765;&#x8861;&#x91CF;&#x3002;&#x5B83;&#x4F1A;&#x53D7;&#x5230;&#x7CFB;&#x7EDF;&#x9519;&#x8BEF;&#xFF0C;&#x57FA;&#x7840;&#x8BBE;&#x65BD;&#x95EE;&#x9898;&#xFF0C;&#x6076;&#x610F;&#x653B;&#x51FB;&#x548C;&#x7CFB;&#x7EDF;&#x8D1F;&#x8F7D;&#x7684;&#x5F71;&#x54CD;&#x3002;&#x4E91;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x901A;&#x5E38;&#x4F1A;&#x4E3A;&#x7528;&#x6237;&#x63D0;&#x4F9B;&#x670D;&#x52A1;&#x7B49;&#x7EA7;&#x534F;&#x8BAE;&#xFF08;SLA&#xFF09;&#xFF0C;&#x56E0;&#x6B64;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x5FC5;&#x987B;&#x8BBE;&#x8BA1;&#x4E3A;&#x6700;&#x5927;&#x9650;&#x5EA6;&#x5730;&#x63D0;&#x9AD8;&#x53EF;&#x7528;&#x6027;&#x3002;</p>
+<h3 id="&#x6570;&#x636E;&#x7BA1;&#x7406;">&#x6570;&#x636E;&#x7BA1;&#x7406;</h3>
+<p>&#x6570;&#x636E;&#x7BA1;&#x7406;&#x662F;&#x4E91;&#x5E94;&#x7528;&#x7684;&#x5173;&#x952E;&#x8981;&#x7D20;&#xFF0C;&#x5F71;&#x54CD;&#x4E86;&#x5927;&#x591A;&#x6570;&#x7684;&#x8D28;&#x91CF;&#x5C5E;&#x6027;&#x3002;&#x56E0;&#x4E3A;&#x6027;&#x80FD;&#xFF0C;&#x53EF;&#x6269;&#x5C55;&#x6027;&#x6216;&#x53EF;&#x7528;&#x6027;&#x7B49;&#x539F;&#x56E0;&#xFF0C;&#x6570;&#x636E;&#x901A;&#x5E38;&#x6258;&#x7BA1;&#x5728;&#x4E0D;&#x540C;&#x7684;&#x4F4D;&#x7F6E;&#x5E76;&#x8DE8;&#x591A;&#x4E2A;&#x670D;&#x52A1;&#x5668;&#xFF0C;&#x8FD9;&#x53EF;&#x80FD;&#x4F1A;&#x5E26;&#x6765;&#x4E00;&#x7CFB;&#x5217;&#x6311;&#x6218;&#x3002;&#x4F8B;&#x5982;&#xFF0C;&#x5FC5;&#x987B;&#x4FDD;&#x6301;&#x6570;&#x636E;&#x4E00;&#x81F4;&#x6027;&#xFF0C;&#x5E76;&#x4E14;&#x6570;&#x636E;&#x901A;&#x5E38;&#x9700;&#x8981;&#x5728;&#x4E0D;&#x540C;&#x4F4D;&#x7F6E;&#x95F4;&#x540C;&#x6B65;&#x3002;</p>
+<h3 id="&#x8BBE;&#x8BA1;&#x548C;&#x5B9E;&#x73B0;">&#x8BBE;&#x8BA1;&#x548C;&#x5B9E;&#x73B0;</h3>
+<p>&#x826F;&#x597D;&#x7684;&#x8BBE;&#x8BA1;&#x6DB5;&#x76D6;&#x4E86;&#x5982;&#x7EC4;&#x4EF6;&#x8BBE;&#x8BA1;&#x548C;&#x90E8;&#x7F72;&#x4E2D;&#x7684;&#x4E00;&#x81F4;&#x6027;&#x548C;&#x76F8;&#x5173;&#x6027;&#xFF0C;&#x7B80;&#x5316;&#x7BA1;&#x7406;&#x548C;&#x5F00;&#x53D1;&#x7684;&#x53EF;&#x7EF4;&#x62A4;&#x6027;&#xFF0C;&#x4EE5;&#x53CA;&#x5141;&#x8BB8;&#x7EC4;&#x4EF6;&#x548C;&#x5B50;&#x7CFB;&#x7EDF;&#x5728;&#x5176;&#x5B83;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x548C;&#x573A;&#x666F;&#x4E2D;&#x7684;&#x53EF;&#x91CD;&#x7528;&#x6027;&#x7B49;&#x56E0;&#x7D20;&#x3002;&#x5728;&#x8BBE;&#x8BA1;&#x548C;&#x5B9E;&#x65BD;&#x9636;&#x6BB5;&#x505A;&#x51FA;&#x7684;&#x51B3;&#x7B56;&#x5BF9;&#x6258;&#x7BA1;&#x5728;&#x4E91;&#x5546;&#x7684;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x548C;&#x670D;&#x52A1;&#x7684;&#x8D28;&#x91CF;&#x3001;&#x603B;&#x4F53;&#x62E5;&#x6709;&#x6210;&#x672C;&#x4EA7;&#x751F;&#x5DE8;&#x5927;&#x7684;&#x5F71;&#x54CD;&#x3002;</p>
+<h3 id="&#x6D88;&#x606F;">&#x6D88;&#x606F;</h3>
+<p>&#x4E91;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x7684;&#x5206;&#x5E03;&#x5F0F;&#x7279;&#x6027;&#x9700;&#x8981;&#x4E00;&#x79CD;&#x8FDE;&#x63A5;&#x7EC4;&#x4EF6;&#x548C;&#x670D;&#x52A1;&#x7684;&#x6D88;&#x606F;&#x4F20;&#x9012;&#x57FA;&#x7840;&#x8BBE;&#x65BD;&#xFF0C;&#x7406;&#x60F3;&#x60C5;&#x51B5;&#x4E0B;&#x4EE5;&#x677E;&#x6563;&#x8026;&#x5408;&#x7684;&#x65B9;&#x5F0F;&#xFF0C;&#x4EE5;&#x4FBF;&#x6700;&#x5927;&#x9650;&#x5EA6;&#x5730;&#x63D0;&#x9AD8;&#x53EF;&#x6269;&#x5C55;&#x6027;&#x3002; &#x5F02;&#x6B65;&#x6D88;&#x606F;&#x7CFB;&#x7EDF;&#x4F7F;&#x7528;&#x5E7F;&#x6CDB;&#xFF0C;&#x63D0;&#x4F9B;&#x4E86;&#x8BB8;&#x591A;&#x597D;&#x5904;&#xFF0C;&#x4F46;&#x4E5F;&#x5E26;&#x6765;&#x4E86;&#x8BF8;&#x5982;&#x6D88;&#x606F;&#x6392;&#x5E8F;&#xFF0C;<a href="https://docs.microsoft.com/en-us/dotnet/framework/wcf/feature-details/poison-message-handling" target="_blank">&#x6BD2;&#x836F;&#x6D88;&#x606F;&#x7BA1;&#x7406;</a>&#xFF0C;&#x5E42;&#x7B49;&#x7B49;&#x7684;&#x6311;&#x6218;</p>
+<h3 id="&#x7BA1;&#x7406;&#x548C;&#x76D1;&#x63A7;">&#x7BA1;&#x7406;&#x548C;&#x76D1;&#x63A7;</h3>
+<p>Cloud applications run in in a remote datacenter where you do not have full control of the infrastructure or, in some cases, the operating system. This can make management and monitoring more difficult than an on-premises deployment. Applications must expose runtime information that administrators and operators can use to manage and monitor the system, as well as supporting changing business requirements and customization without requiring the application to be stopped or redeployed.</p>
+<p>&#x4E91;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x8FD0;&#x884C;&#x5728;&#x57FA;&#x7840;&#x8BBE;&#x65BD;&#x751A;&#x81F3;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x65E0;&#x6CD5;&#x5B8C;&#x5168;&#x63A7;&#x5236;&#x7684;&#x8FDC;&#x7A0B;&#x6570;&#x636E;&#x4E2D;&#x5FC3;&#x3002;&#x7BA1;&#x7406;&#x548C;&#x76D1;&#x63A7;&#x6BD4;&#x672C;&#x5730;&#x90E8;&#x7F72;&#x66F4;&#x56F0;&#x96BE;&#x3002;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x5FC5;&#x987B;&#x516C;&#x5F00;&#x7BA1;&#x7406;&#x5458;&#x548C;&#x64CD;&#x4F5C;&#x5458;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x7684;&#x8FD0;&#x884C;&#x65F6;&#x4FE1;&#x606F;&#x6765;&#x7BA1;&#x7406;&#x548C;&#x76D1;&#x89C6;&#x7CFB;&#x7EDF;&#xFF0C;&#x4EE5;&#x53CA;&#x652F;&#x6301;&#x4E0D;&#x65AD;&#x53D8;&#x5316;&#x7684;&#x4E1A;&#x52A1;&#x9700;&#x6C42;&#x548C;&#x5B9A;&#x5236;&#xFF0C;&#x800C;&#x4E0D;&#x9700;&#x8981;&#x505C;&#x6B62;&#x6216;&#x91CD;&#x65B0;&#x90E8;&#x7F72;&#x5E94;&#x7528;&#x7A0B;&#x5E8F;&#x3002;</p>
+<p>Cloud Design Patterns</p>
+<pre><code>            Catalog of patterns
+</code></pre><p>PATTERN SUMMARY
+      Ambassador
+  Create helper services that send network requests on behalf of a consumer service or application.
+   Anti-Corruption Layer
+  Implement a fac&#x327;ade or adapter layer between a modern application and a legacy system.
+   Backends for Frontends
+  Create separate backend services to be consumed by specific frontend applications or interfaces.
+   Bulkhead
+  Isolate elements of an application into pools so that if one fails, the others will continue to function.
+   Cache-Aside
+   Load data on demand into a cache from a data store
+   Circuit Breaker
+ Handle faults that might take a variable amount of time to fix when connecting to a remote service or resource.
+   CQRS
+  Segregate operations that read data from operations that update data by using separate interfaces.
+   Compensating Transaction
+  Undo the work performed by a series of steps, which together define an eventually consistent operation.
+   Competing Consumers
+   Enable multiple concurrent consumers to process messages received on the same messaging channel.
+     Performance and Scalability
+Performance is an indication of the responsiveness of a system to execute any action within a given time interval, while scalability is ability of a system either to handle increases in load without impact on performance or for the available resources to be readily increased. Cloud applications typically encounter variable workloads and peaks in activity. Predicting these, especially in a multi-tenant scenario, is almost impossible. Instead, applications should be able to scale out within limits to meet peaks in demand, and scale in when demand decreases. Scalability concerns not just compute instances, but other elements such as data storage, messaging infrastructure, and more.
+      Resiliency
+Resiliency is the ability of a system to gracefully handle and recover from failures. The nature of cloud hosting, where applications are often multi-tenant, use shared platform services, compete for resources and bandwidth, communicate over the Internet, and run on commodity hardware means there is an increased likelihood that both transient and more permanent faults will arise. Detecting failures, and recovering quickly and efficiently, is necessary to maintain resiliency.
+      Security
+Security is the capability of a system to prevent malicious or accidental actions outside of the designed usage, and to prevent disclosure or loss of information. Cloud applications are exposed on the Internet outside trusted on- premises boundaries, are often open to the public, and may serve untrusted users. Applications must be designed and deployed in a way that protects them from malicious attacks, restricts access to only approved users, and protects sensitive data.</p>
+<pre><code>                PATTERN
+</code></pre><p>SUMMARY
+     Compute Resource Consolidation
+Consolidate multiple tasks or operations into a single computational unit
+     Event Sourcing
+Use an append-only store to record the full series of events that describe actions taken on data in a domain.
+     External Configuration Store
+Move configuration information out of the application deployment package to a centralized location.
+     Federated Identity
+Delegate authentication to an external identity provider.
+     Gatekeeper
+Protect applications and services by using a dedicated host instance that acts as a broker between clients and the application or service, validates and sanitizes requests, and passes requests and data between them.
+     Gateway Aggregation
+Use a gateway to aggregate multiple individual requests into a single request.
+     Gateway Offloading
+Offload shared or specialized service functionality to a gateway proxy.
+     Gateway Routing
+Route requests to multiple services using a single endpoint.
+     Health Endpoint Monitoring
+Implement functional checks in an application that external tools can access through exposed endpoints at regular intervals.
+     Index Table
+Create indexes over the fields in data stores that are frequently referenced by queries.
+     Leader Election
+Coordinate the actions performed by a collection of collaborating task instances in a distributed application by electing one instance as the leader that assumes responsibility for managing the other instances.
+     Materialized View
+Generate prepopulated views over the data in one or more data stores when the data isn&apos;t ideally formatted for required query operations.
+     Pipes and Filters
+Break down a task that performs complex processing into a series of separate elements that can be reused.
+     Priority Queue
+Prioritize requests sent to services so that requests with a higher priority are received and processed more quickly than those with a lower priority.
+     Queue-Based Load Leveling
+Use a queue that acts as a buffer between a task and a service that it invokes in order to smooth intermittent heavy loads.
+     Retry
+Enable an application to handle anticipated, temporary failures when it tries to connect to a service or network resource by transparently retrying an operation that&apos;s previously failed.</p>
+<p>   PATTERN
+SUMMARY
+     Scheduler Agent Supervisor
+Coordinate a set of actions across a distributed set of services and other remote resources.
+     Sharding
+Divide a data store into a set of horizontal partitions or shards.
+     Sidecar
+Deploy components of an application into a separate process or container to provide isolation and encapsulation.
+     Static Content Hosting
+Deploy static content to a cloud-based storage service that can deliver them directly to the client.
+     Strangler
+Incrementally migrate a legacy system by gradually replacing specific pieces of functionality with new applications and services.
+     Throttling
+Control the consumption of resources used by an instance of an application, an individual tenant, or an entire service.</p>
 
                                 
                                 </section>
@@ -738,6 +828,10 @@
             
                 
                 
+                <a href="categories.md" class="navigation navigation-next navigation-unique" aria-label="Next page: 模式分类">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
             
         
     </div>
@@ -745,7 +839,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"引言","level":"1.1","depth":1,"next":{"title":"微软Azure架构中心","level":"1.2","depth":1,"url":"https://docs.microsoft.com/en-us/azure/architecture/","ref":"https://docs.microsoft.com/en-us/azure/architecture/","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"README.md","mtime":"2017-09-18T16:25:46.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-09-16T14:15:44.210Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"云设计模式(Cloud Design Patterns)","level":"1.3","depth":1,"next":{"title":"模式分类","level":"1.4","depth":1,"path":"categories.md","ref":"categories.md","articles":[{"title":"可用性类(Availability)","level":"1.4.1","depth":2,"path":"categories/availability.md","ref":"categories/availability.md","articles":[]},{"title":"数据管理类(Data management)","level":"1.4.2","depth":2,"path":"categories/data-management.md","ref":"categories/data-management.md","articles":[]},{"title":"设计实现类(Design and implementation)","level":"1.4.3","depth":2,"path":"categories/design-and-implementation.md","ref":"categories/design-and-implementation.md","articles":[]},{"title":"消息类(Messaging)","level":"1.4.4","depth":2,"path":"categories/messaging.md","ref":"categories/messaging.md","articles":[]},{"title":"管理和监控类(Management and monitoring)","level":"1.4.5","depth":2,"path":"categories/management-and-monitoring.md","ref":"categories/management-and-monitoring.md","articles":[]},{"title":"性能和可扩展性类(Performance and scalability)","level":"1.4.6","depth":2,"path":"categories/performance-and-scalability.md","ref":"categories/performance-and-scalability.md","articles":[]},{"title":"弹性类(Resiliency)","level":"1.4.7","depth":2,"path":"categories/resiliency.md","ref":"categories/resiliency.md","articles":[]},{"title":"安全类(Security)","level":"1.4.8","depth":2,"path":"categories/security.md","ref":"categories/security.md","articles":[]}]},"previous":{"title":"微软Azure架构中心","level":"1.2","depth":1,"url":"https://docs.microsoft.com/en-us/azure/architecture/","ref":"https://docs.microsoft.com/en-us/azure/architecture/","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"cloud-design-patterns.md","mtime":"2017-09-19T16:14:20.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2017-09-16T14:15:44.210Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
