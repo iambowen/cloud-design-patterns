@@ -14,7 +14,7 @@
     * [安全类(Security)](categories/security.md)
 * [大使模式(Ambassador)](patterns/ambassador.md)
 * [反腐模式(Anti-corruption Layer)](patterns/anti-corruption-layer.md)
-* [前端专用的后端模式(Backends for Frontends)](patterns/backend-for-frontend.md)
+* [前端专属的后端模式(Backends for Frontends)](patterns/backends-for-frontends.md)
 * [隔板模式(Bulkhead)](patterns/bulkhead.md)
 * [缓存?模式(Cache-Aside)](patterns/cache-aside.md)
 * [断路器模式(Circuit Breaker)](patterns/circuit-breaker.md)
