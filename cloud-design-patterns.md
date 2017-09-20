@@ -24,84 +24,38 @@
 
 云应用程序运行在基础设施甚至操作系统无法完全控制的远程数据中心。管理和监控比本地部署更困难。应用程序必须公开管理员和操作员可以使用的运行时信息来管理和监视系统，以及支持不断变化的业务需求和定制，而不需要停止或重新部署应用程序。
 
-Cloud Design Patterns
- 
-                Catalog of patterns
-PATTERN SUMMARY
-      Ambassador
-  Create helper services that send network requests on behalf of a consumer service or application.
-   Anti-Corruption Layer
-  Implement a façade or adapter layer between a modern application and a legacy system.
-   Backends for Frontends
-  Create separate backend services to be consumed by specific frontend applications or interfaces.
-   Bulkhead
-  Isolate elements of an application into pools so that if one fails, the others will continue to function.
-   Cache-Aside
-   Load data on demand into a cache from a data store
-   Circuit Breaker
- Handle faults that might take a variable amount of time to fix when connecting to a remote service or resource.
-   CQRS
-  Segregate operations that read data from operations that update data by using separate interfaces.
-   Compensating Transaction
-  Undo the work performed by a series of steps, which together define an eventually consistent operation.
-   Competing Consumers
-   Enable multiple concurrent consumers to process messages received on the same messaging channel.
-     Performance and Scalability
-Performance is an indication of the responsiveness of a system to execute any action within a given time interval, while scalability is ability of a system either to handle increases in load without impact on performance or for the available resources to be readily increased. Cloud applications typically encounter variable workloads and peaks in activity. Predicting these, especially in a multi-tenant scenario, is almost impossible. Instead, applications should be able to scale out within limits to meet peaks in demand, and scale in when demand decreases. Scalability concerns not just compute instances, but other elements such as data storage, messaging infrastructure, and more.
-      Resiliency
-Resiliency is the ability of a system to gracefully handle and recover from failures. The nature of cloud hosting, where applications are often multi-tenant, use shared platform services, compete for resources and bandwidth, communicate over the Internet, and run on commodity hardware means there is an increased likelihood that both transient and more permanent faults will arise. Detecting failures, and recovering quickly and efficiently, is necessary to maintain resiliency.
-      Security
-Security is the capability of a system to prevent malicious or accidental actions outside of the designed usage, and to prevent disclosure or loss of information. Cloud applications are exposed on the Internet outside trusted on- premises boundaries, are often open to the public, and may serve untrusted users. Applications must be designed and deployed in a way that protects them from malicious attacks, restricts access to only approved users, and protects sensitive data.
-    
-                    PATTERN
-SUMMARY
-     Compute Resource Consolidation
-Consolidate multiple tasks or operations into a single computational unit
-     Event Sourcing
-Use an append-only store to record the full series of events that describe actions taken on data in a domain.
-     External Configuration Store
-Move configuration information out of the application deployment package to a centralized location.
-     Federated Identity
-Delegate authentication to an external identity provider.
-     Gatekeeper
-Protect applications and services by using a dedicated host instance that acts as a broker between clients and the application or service, validates and sanitizes requests, and passes requests and data between them.
-     Gateway Aggregation
-Use a gateway to aggregate multiple individual requests into a single request.
-     Gateway Offloading
-Offload shared or specialized service functionality to a gateway proxy.
-     Gateway Routing
-Route requests to multiple services using a single endpoint.
-     Health Endpoint Monitoring
-Implement functional checks in an application that external tools can access through exposed endpoints at regular intervals.
-     Index Table
-Create indexes over the fields in data stores that are frequently referenced by queries.
-     Leader Election
-Coordinate the actions performed by a collection of collaborating task instances in a distributed application by electing one instance as the leader that assumes responsibility for managing the other instances.
-     Materialized View
-Generate prepopulated views over the data in one or more data stores when the data isn't ideally formatted for required query operations.
-     Pipes and Filters
-Break down a task that performs complex processing into a series of separate elements that can be reused.
-     Priority Queue
-Prioritize requests sent to services so that requests with a higher priority are received and processed more quickly than those with a lower priority.
-     Queue-Based Load Leveling
-Use a queue that acts as a buffer between a task and a service that it invokes in order to smooth intermittent heavy loads.
-     Retry
-Enable an application to handle anticipated, temporary failures when it tries to connect to a service or network resource by transparently retrying an operation that's previously failed.
-  
-       
-   PATTERN
-SUMMARY
-     Scheduler Agent Supervisor
-Coordinate a set of actions across a distributed set of services and other remote resources.
-     Sharding
-Divide a data store into a set of horizontal partitions or shards.
-     Sidecar
-Deploy components of an application into a separate process or container to provide isolation and encapsulation.
-     Static Content Hosting
-Deploy static content to a cloud-based storage service that can deliver them directly to the client.
-     Strangler
-Incrementally migrate a legacy system by gradually replacing specific pieces of functionality with new applications and services.
-     Throttling
-Control the consumption of resources used by an instance of an application, an individual tenant, or an entire service.
-     
-
+## 模式目录
+| 模式                                       | 总结                               |
+|------------------------------------------|----------------------------------|
+| 大使模式(Ambassador)                         | 创建代表消费者服务或应用程序发送网络请求的帮助服务。       |
+| 反腐模式(Anti-corruption Layer)              | 在现代应用程序和遗留系统之间实现装饰或适配器层。         |
+| 前端专用的后端模式(Backends for Frontends)        | 创建单独的后端服务让特定的前端应用程序或接口使用。        |
+| 隔板模式(Bulkhead)                           | 将应用程序的元素隔离到池中，如果其中一个失败，其它的将继续运行。|
+| 缓存?模式(Cache-Aside)                       | 按需将数据从数据存储加载到缓存中。|
+| 断路器模式(Circuit Breaker)                   | 连接到远程服务或资源时, 处理可能需要花费时间来修复的故障。 |
+| 命令和查询责任分离模式(CQRS)                        | 通过使用单独的接口来分离读取数据和更新数据的操作。|
+| 补偿交易模式(Compensating Transaction)         |撤消通过一系列步骤执行的工作，它们一起定义最终一致的操作。|
+| 竞争消费者模式(Competing Consumers)             |使用多个并发消费者来处理在同一消息通道上接收的消息。|
+| 计算资源整合模式(Compute Resource Consolidation) | 将多个任务或操作整合到单个计算单元中。|
+| 事件溯源模式(Event Sourcing)                   | 使用仅追加存储去记录描述对域中的数据采取的操作的完整系列事件。|
+| 外部配置存储(External Configuration Store)     | 将应用程序部署包中的配置信息移动到中心化的位置。 |
+| 联合身份模式(Federated Identity)               |将认证委托给外部身份提供者。|
+| 看门人模式(Gatekeeper)                        |  通过使用专用主机实例，充当客户端和应用程序或服务之间的代理，来保护应用程序和服务，该主机实例，对请求进行验证和消毒，并在它们之间传递请求和数据。|
+| 网关聚合模式(Gateway Aggregation)              |使用网关将多个单独的请求聚合到一个请求中。|
+| 网关卸载模式(Gateway Offloading)               |卸载共享或特定的服务功能到网关代理。|
+| 网关路由模式(Gateway Routing)                  |使用单个端点将请求路由到多个服务。 |
+| 健康端点监控模式(Health Endpoint Monitoring)     |在应用程序中执行功能检查，外部工具可以定期通过暴露的端点访问。|
+| 索引表模式(Index Table)                       |为查询经常引用的数据存储区中的字段创建索引。|
+| 选举模式(Leader Election)                    | 通过选举一个实例作为负责管理其它实例的负责人，来协调分布式应用程序中的协作任务实例集合执行的操作。|
+| 物化视图模式(Materialized View)                |针对所需的查询操作，当数据没有理想地格式化时，在一个或多个数据存储中的数据上生成预填充视图。|
+| 管道和过滤器模式(Pipes and Filters)              | 将需要执行复杂处理的任务分解成可以重复使用的一系列单独的元素。 |
+| 优先级队列模式(Priority Queue)                  | 确定发送到服务的请求的优先级，使得具有较高优先级的请求更快地被接收和处理。|
+| 基于队列的负载均衡模式(Queue-Based Load Leveling)   | 使用一个队列作为任务和服务之间的缓冲区，平滑间歇性重负载。|
+| 重试模式(Retry)                              | 在应用程序尝试连接到服务或网络资源遇到预期的临时故障时，让程序通过透明地重试以前失败的操作来处理。|
+| 调度代理主管模式(Scheduler Agent Supervisor)     | 在一组分布式服务和其它远程资源之间协调一组操作。|
+| 分片模式(Sharding))                          | 将数据存储区划分为一组水平分区或分片。 |
+| 挎斗模式(Side-Car)                           | 将应用程序的组件部署到单独的进程或容器中以提供隔离和封装。 |
+| 静态内容托管模式(Static Content Hosting)         | 将静态内容部署到基于云的存储服务，可以将它们直接传递给客户端。 |
+| 绞杀者模式(Strangler)                         | 通过使用新的应用程序和服务逐渐替换特定功能部件来逐步迁移旧系统。 |
+| 限流模式(Throttling)                         | 控制应用程序，个人租户或整个服务的实例消耗的资源。 |
+| 随从钥匙模式？(Valet Ke                         |使用向客户端提供对特定资源或服务的有限直接访问权限的令牌或密钥。|
