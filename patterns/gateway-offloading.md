@@ -71,6 +71,7 @@ proxy_set_header X-Real-IP $remote_addr;
         }
 }
 ```
+
 ## 相关指导
 
 * [前端专属的后端模式](patterns/backends-for-frontends.md)
