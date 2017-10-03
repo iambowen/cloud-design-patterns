@@ -47,23 +47,26 @@
 
 ## 问题与注意事项
 
+在决定如何使用该模式时需考虑以下几点：
 
-Consider the following points when deciding how to implement this pattern:
-The system will only be eventually consistent when creating materialized views or generating projections of data by replaying events. There's some delay between an application adding events to the event store as the result of handling a request, the events being published, and consumers of the events handling them. During this period, new events that describe further changes to entities might have arrived at the event store.
+当创建物化视图或者通过重播事件产生数据最终状态时，系统只能保证最终一致性。在应用将请求处理的结果作为事件向事件存储中添加时、事件被发布时以及事件消费者进行处理之间，是存在一定延迟的。在这期间，有可能因实体产生更多变化而产生新的事件存入事件存储中。
 
+> 注：
+>
+> 关于最终一致性的更多信息参见[Data Consistency Primer](https://msdn.microsoft.com/library/dn589800.aspx)。
 
-Note
+事件存储是信息的不变来源，所以事件数据永不应该被更新。唯一一种对实体进行撤销操作的方法是往事件存储里增添一个修正事件。如果已持久化的事件格式（而不是数据本身）需要修改，可能会难以将存储中的已有事件与新版本通过迁移进行融合。也许需要遍历所有事件进行修改才能让它们与新格式相兼容，或者对旧事件使用新格式添加生成新事件。考虑对事件结构的每个版本使用一个版本戳，用于同时维护旧事件和新事件格式。
 
-See the Data Consistency Primer for information about eventual consistency.
-
-
-The event store is the permanent source of information, and so the event data should never be updated. The only way to update an entity to undo a change is to add a compensating event to the event store. If the format (rather than the data) of the persisted events needs to change, perhaps during a migration, it can be difficult to combine existing events in the store with the new version. It might be necessary to iterate through all the events making changes so they're compliant with the new format, or add new events that use the new format. Consider using a version stamp on each version of the event schema to maintain both the old and the new event formats.
-
+多线程应用和应用的多实例可能会向事件存储中同时存储事件。事件存储中的事件一致性是极为重要的，因为事件的顺序会对特定实体造成影响（实体发生变化的顺序会影响其当前状态）。对每一个事件添加时间戳有助于避免这类问题。另外一种常见的实践是为同一请求所产生的每个事件用一个自增的标识符作为标记。如果两个操作尝试为同一个实体在同一时间添加事件，那么事件存储可以拒绝标识符与已存在的实体标识符相匹配的那个事件。
 
 Multi-threaded applications and multiple instances of applications might be storing events in the event store. The consistency of events in the event store is vital, as is the order of events that affect a specific entity (the order that changes occur to an entity affects its current state). Adding a timestamp to every event can help to avoid issues. Another common practice is to annotate each event resulting from a request with an incremental identifier. If two actions attempt to add events for the same entity at the same time, the event store can reject an event that matches an existing entity identifier and event identifier.
+
 There's no standard approach, or existing mechanisms such as SQL queries, for reading the events to obtain information. The only data that can be extracted is a stream of events using an event identifier as the criteria. The event ID typically maps to individual entities. The current state of an entity can be determined only by replaying all of the events that relate to it against the original state of that entity.
+
 The length of each event stream affects managing and updating the system. If the streams are large, consider creating snapshots at specific intervals such as a specified number of events. The current state of the entity can be obtained from the snapshot and by replaying any events that occurred after that point in time. For more information about creating snapshots of data, see Snapshot on Martin Fowler’s Enterprise Application Architecture website and Master-Subordinate Snapshot Replication.
+
 Even though event sourcing minimizes the chance of conflicting updates to the data, the application must still be able to deal with inconsistencies that result from eventual consistency and the lack of transactions. For example, an event that indicates a reduction in stock inventory might arrive in the data store while an order for that item is being placed, resulting in a requirement to reconcile the two operations either by advising the customer or creating a back order.
+
 Event publication might be “at least once,” and so consumers of the events must be idempotent. They must not reapply the update described in an event if the event is handled more than once. For example, if multiple instances of a consumer maintain an aggregate an entity's property, such as the total number of orders placed, only one must succeed in incrementing the aggregate when an order placed event occurs. While this isn't a key characteristic of event sourcing, it's the usual implementation decision.
 
 
