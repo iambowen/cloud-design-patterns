@@ -57,15 +57,15 @@
 
 事件存储是信息的不变来源，所以事件数据永不应该被更新。唯一一种对实体进行撤销操作的方法是往事件存储里增添一个修正事件。如果已持久化的事件格式（而不是数据本身）需要修改，可能会难以将存储中的已有事件与新版本通过迁移进行融合。也许需要遍历所有事件进行修改才能让它们与新格式相兼容，或者对旧事件使用新格式添加生成新事件。考虑对事件结构的每个版本使用一个版本戳，用于同时维护旧事件和新事件格式。
 
-多线程应用和应用的多实例可能会向事件存储中同时存储事件。事件存储中的事件一致性是极为重要的，因为事件的顺序会对特定实体造成影响（实体发生变化的顺序会影响其当前状态）。对每一个事件添加时间戳有助于避免这类问题。另外一种常见的实践是为同一请求所产生的每个事件用一个自增的标识符作为标记。如果两个操作尝试为同一个实体在同一时间添加事件，那么事件存储可以拒绝标识符与已存在的实体标识符相匹配的那个事件。
+多线程应用和多实例应用可能会同时向事件存储中存储事件。事件存储中的事件一致性极为重要，因为事件的顺序会对特定实体造成影响（实体发生变化的顺序会影响其当前状态）。为每一个事件添加时间戳有助于避免这类问题。另外一种常见的实践是为同一请求所产生的每个事件用一个自增的标识符作为标记。如果两个动作尝试为同一个实体在同一时刻添加事件，那么事件存储可以拒绝与已存在的实体标识符相同的那个事件。
 
-Multi-threaded applications and multiple instances of applications might be storing events in the event store. The consistency of events in the event store is vital, as is the order of events that affect a specific entity (the order that changes occur to an entity affects its current state). Adding a timestamp to every event can help to avoid issues. Another common practice is to annotate each event resulting from a request with an incremental identifier. If two actions attempt to add events for the same entity at the same time, the event store can reject an event that matches an existing entity identifier and event identifier.
+对于从事件中读取信息，并不存在标准的方法或者类似SQL查询这样现成的机制。唯一能够被提取的数据就是使用事件标识符作为查询条件的一个事件流。事件ID通常与各个独立实体相对应。某个实体的当前状态只能通过重播从实体初始状态开始到现在的所有相关事件来决定。
 
-There's no standard approach, or existing mechanisms such as SQL queries, for reading the events to obtain information. The only data that can be extracted is a stream of events using an event identifier as the criteria. The event ID typically maps to individual entities. The current state of an entity can be determined only by replaying all of the events that relate to it against the original state of that entity.
+各个事件流的长度会对系统的管理和更新带来影响。如果事件流太长，考虑在特定时间间隔为其创建快照，比如在收集到一定数量的事件之后。当前实体状态可以从快照和对快照时间点之后发生的事件进行重播而获得。关于创建数据快照的更多信息，参见[Martin Fowler的企业应用架构中关于快照的文章](http://martinfowler.com/eaaDev/Snapshot.html)以及[Master-Subordinate Snapshot Replication](https://msdn.microsoft.com/library/ff650012.aspx)。
 
-The length of each event stream affects managing and updating the system. If the streams are large, consider creating snapshots at specific intervals such as a specified number of events. The current state of the entity can be obtained from the snapshot and by replaying any events that occurred after that point in time. For more information about creating snapshots of data, see Snapshot on Martin Fowler’s Enterprise Application Architecture website and Master-Subordinate Snapshot Replication.
+虽然事件溯源可以将数据更新冲突的可能性减小到最低，应用仍然需要能够处理因为最终一致性和缺乏事务机制而导致的不一致性。例如，在事件存储中产生一个库存减小事件的同时下了一个要订购该商品的订单，就需要对这两个操作进行调和，通知用户或者创建一个延期发货订单。
 
-Even though event sourcing minimizes the chance of conflicting updates to the data, the application must still be able to deal with inconsistencies that result from eventual consistency and the lack of transactions. For example, an event that indicates a reduction in stock inventory might arrive in the data store while an order for that item is being placed, resulting in a requirement to reconcile the two operations either by advising the customer or creating a back order.
+
 
 Event publication might be “at least once,” and so consumers of the events must be idempotent. They must not reapply the update described in an event if the event is handled more than once. For example, if multiple instances of a consumer maintain an aggregate an entity's property, such as the total number of orders placed, only one must succeed in incrementing the aggregate when an order placed event occurs. While this isn't a key characteristic of event sourcing, it's the usual implementation decision.
 
