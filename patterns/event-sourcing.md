@@ -65,29 +65,29 @@
 
 虽然事件溯源可以将数据更新冲突的可能性减小到最低，应用仍然需要能够处理因为最终一致性和缺乏事务机制而导致的不一致性。例如，在事件存储中产生一个库存减小事件的同时下了一个要订购该商品的订单，就需要对这两个操作进行调和，通知用户或者创建一个延期发货订单。
 
+事件的发布可能“不止一次”，所以消费者对事件的处理必须是幂等的。如果事件被多次处理，消费者不得对事件重复操作。举个例子，如果消费者有多个实例一起维护某个实体属性的聚合，比如总下单数量，那么当某个下单事件发生时，只能有其中一个实例增加下单总数。然而这并不是事件溯源的关键特性，所以通常由实现方来做决定。
 
+## 何时使用该模式
 
-Event publication might be “at least once,” and so consumers of the events must be idempotent. They must not reapply the update described in an event if the event is handled more than once. For example, if multiple instances of a consumer maintain an aggregate an entity's property, such as the total number of orders placed, only one must succeed in incrementing the aggregate when an order placed event occurs. While this isn't a key characteristic of event sourcing, it's the usual implementation decision.
+在以下场景使用该模式：
 
+* 当你想从数据中捕获“意图”、“目的”或“原因”时。例如，一个客户实体的变更，可能是由于一系列特定的事件类型所致，比如搬家、账户终止或身故等。
+* 当最小化或完全避免数据更新冲突变得非常重要时。
+* 当你想记录所发生的事件，并能通过重播事件来存储系统状态、回滚变更或保留历史与审计日志时。例如，当某个任务涉及多个步骤，你可能需要执行某些动作来回滚更新，并且重播某些步骤来让数据回到一致的状态。
+* 当对于应用的操作来说使用事件是一种很自然的特性，而且不需要额外的开发或实现工作时。
+* 当你需要将数据输入或更新过程与相应的任务相互解耦时。这会有助于增强用户界面性能，或者将事件分发给其它监听事件并需要执行动作的监听器。例如，将工资系统与报销网站集成起来，以便让事件存储中产生因站点数据更新而产生的事件，网站和工资系统都可以消费该事件。
+* 当你需要在需求变化时灵活地修改物化模型和实体数据的格式时，或者（在与CQRS模式联合使用）需要采用读模型或试图来暴露数据时。
+* 当与CQRS模式联合使用，并且在读模型被更新时最终一致性是可被接受的，或者从事件流中重新融合实体和数据所造成的影响是可接受的。
 
-When to use this pattern
-Use this pattern in the following scenarios:
-When you want to capture intent, purpose, or reason in the data. For example, changes to a customer entity can be captured as a series of specific event types such as Moved home, Closed account, or Deceased.
-When it's vital to minimize or completely avoid the occurrence of conflicting updates to data.
-When you want to record events that occur, and be able to replay them to restore the state of a system, roll back changes, or keep a history and audit log. For example, when a task involves multiple steps you might need to execute actions to revert updates and then replay some steps to bring the data back into a consistent state.
-When using events is a natural feature of the operation of the application, and requires little additional development or implementation effort.
-When you need to decouple the process of inputting or updating data from the tasks required to apply these actions. This might be to improve UI performance, or to distribute events to other listeners that take action when the events occur. For example, integrating a payroll system with an expense submission website so that events raised by the event store in response to data updates made in the website are consumed by both the website and the payroll system.
-When you want flexibility to be able to change the format of materialized models and entity data if requirements change, or—when used in conjunction with CQRS—you need to adapt a read model or the views that expose the data.
-When used in conjunction with CQRS, and eventual consistency is acceptable while a read model is updated, or the performance impact of rehydrating entities and data from an event stream is acceptable.
-This pattern might not be useful in the following situations:
-Small or simple domains, systems that have little or no business logic, or nondomain systems that naturally work well with traditional CRUD data management mechanisms.
-Systems where consistency and real-time updates to the views of the data are required.
-Systems where audit trails, history, and capabilities to roll back and replay actions are not required.
-Systems where there's only a very low occurrence of conflicting updates to the underlying data. For example, systems that predominantly add data rather than updating it.
+这种模式可能不适用于以下场景：
 
+* 小的或简单的领域，业务逻辑很少甚至没有的系统，或者非领域系统，用传统的CRUD数据管理机制就能很好地工作。
+* 需要强一致性和数据视图实时更新的系统。
+* 不需要审计日志、历史和回滚、重播能力的系统。
+* 极少出现底层数据更新冲突的系统。例如，系统主要用于增加数据而很少做更新。
 
+## 例子
 
-Example
 A conference management system needs to track the number of completed bookings for a conference so that it can check whether there are seats still available when a potential attendee tries to make a booking. The system could store the total number of bookings for a conference in at least two ways:
 The system could store the information about the total number of bookings as a separate entity in a database that holds booking information. As bookings are made or canceled, the system could increment or decrement this number as appropriate. This approach is simple in theory, but can cause scalability issues if a large number of attendees are attempting to book seats during a short period of time. For example, in the last day or so prior to the booking period closing.
 The system could store information about bookings and cancellations as events held in an event store. It could then calculate the number of seats available by replaying these events. This approach can be more scalable due to the immutability of events. The system only needs to be able to read data from the event store, or append data to the event store. Event information about bookings and cancellations is never modified.
