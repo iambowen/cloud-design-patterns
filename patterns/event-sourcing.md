@@ -88,29 +88,44 @@
 
 ## 例子
 
-A conference management system needs to track the number of completed bookings for a conference so that it can check whether there are seats still available when a potential attendee tries to make a booking. The system could store the total number of bookings for a conference in at least two ways:
-The system could store the information about the total number of bookings as a separate entity in a database that holds booking information. As bookings are made or canceled, the system could increment or decrement this number as appropriate. This approach is simple in theory, but can cause scalability issues if a large number of attendees are attempting to book seats during a short period of time. For example, in the last day or so prior to the booking period closing.
-The system could store information about bookings and cancellations as events held in an event store. It could then calculate the number of seats available by replaying these events. This approach can be more scalable due to the immutability of events. The system only needs to be able to read data from the event store, or append data to the event store. Event information about bookings and cancellations is never modified.
-The following diagram illustrates how the seat reservation subsystem of the conference management system might be implemented using event sourcing.
+某个会议管理系统，需要跟踪记录会议的已预订数量，以便在参会者尝试预订时检查是否还有空座位。该系统可以通过至少两种方法来存储总预订数：
+
+* 系统可以用负责维护预订信息的数据库中的一个单独实体来存储总预订数。这种方法理论上比较简单，但是如果大量参会者在短时间内涌入预订座位，会产生可扩展性问题。例如，预定期结束前最后一天或者非常临近结束时。
+* 系统可以将预订和取消信息作为事件存储在事件存储中。然后通过重播这些事件来计算空余座位数。由于事件的不可变性，这种方法更容易扩展。系统只需要能从事件存储中读取数据，或者向事件存储中追加数据即可。关于预订与取消的事件信息永远不会被修改。
+
+下图展示了如何使用事件溯源实现会议管理系统的座位预订子系统。
 
 
 ![](https://docs.microsoft.com/en-us/azure/architecture/patterns/_images/event-sourcing-bounded-context.png)
 
-The sequence of actions for reserving two seats is as follows:
-The user interface issues a command to reserve seats for two attendees. The command is handled by a separate command handler. A piece of logic that is decoupled from the user interface and is responsible for handling requests posted as commands.
-An aggregate containing information about all reservations for the conference is constructed by querying the events that describe bookings and cancellations. This aggregate is called SeatAvailability, and is contained within a domain model that exposes methods for querying and modifying the data in the aggregate.
-Some optimizations to consider are using snapshots (so that you don’t need to query and replay the full list of events to obtain the current state of the aggregate), and maintaining a cached copy of the aggregate in memory.
-The command handler invokes a method exposed by the domain model to make the reservations.
-The SeatAvailability aggregate records an event containing the number of seats that were reserved. The next time the aggregate applies events, all the reservations will be used to compute how many seats remain.
-The system appends the new event to the list of events in the event store.
-If a user cancels a seat, the system follows a similar process except the command handler issues a command that generates a seat cancellation event and appends it to the event store.
-As well as providing more scope for scalability, using an event store also provides a complete history, or audit trail, of the bookings and cancellations for a conference. The events in the event store are the accurate record. There is no need to persist aggregates in any other way because the system can easily replay the events and restore the state to any point in time.
-You can find more information about this example in Introducing Event Sourcing.
-Related patterns and guidance
-The following patterns and guidance might also be relevant when implementing this pattern:
-Command and Query Responsibility Segregation (CQRS) Pattern. The write store that provides the permanent source of information for a CQRS implementation is often based on an implementation of the Event Sourcing pattern. Describes how to segregate the operations that read data in an application from the operations that update data by using separate interfaces.
-Materialized View Pattern. The data store used in a system based on event sourcing is typically not well suited to efficient querying. Instead, a common approach is to generate prepopulated views of the data at regular intervals, or when the data changes. Shows how this can be done.
-Compensating Transaction Pattern. The existing data in an event sourcing store is not updated, instead new entries are added that transition the state of entities to the new values. To reverse a change, compensating entries are used because it isn't possible to simply reverse the previous change. Describes how to undo the work that was performed by a previous operation.
-Data Consistency Primer. When using event sourcing with a separate read store or materialized views, the read data won't be immediately consistent, instead it'll be only eventually consistent. Summarizes the issues surrounding maintaining consistency over distributed data.
-Data Partitioning Guidance. Data is often partitioned when using event sourcing to improve scalability, reduce contention, and optimize performance. Describes how to divide data into discrete partitions, and the issues that can arise.
-Greg Young’s post Why use Event Sourcing?.
+预订两个座位的动作顺序如下：
+
+1. 用户界面发出一个命令，要为两个参会者预订座位。一个独立的命令处理器会处理该命令。少部分逻辑会从用户界面中解耦出来，负责处理以命令形式发送的请求。
+
+2. 通过查询所有预订与取消事件形成包含所有会议预订信息的一个聚合。这个聚合叫作`SeatAvailability`，由一个领域模型所包含，该模型对外暴露查询与修改聚合中的数据的方法。
+
+   > 可以考虑使用快照做一些优化（这样你就不需要查询和重播所有事件来获得聚合当前状态），并在内存中维护关于该聚合的一份缓存拷贝。
+
+3. 命令处理器调用领域模型上暴露出的方法进行预订。
+
+4. 聚合`SeatAvailability`记录下一个含有被预订座位数量的事件。下次这个聚合就可以通过所有预订事件来计算还剩下多少座位。
+
+5. 系统向事件存储的事件列表中追加这个新事件。
+
+如果用户要取消座位，系统遵循类似的过程，只是命令处理器发出的命令产生的是一个座位取消事件并追加到事件存储中。
+
+除了能提供在扩展性方面更大的余地之外，使用事件存储还能够提供一个完整的关于会议预订与取消的历史记录或审计记录。事件存储中的事件是精确的记录。并不需要将聚合持久化到其它地方，因为系统可以轻松地重播事件并恢复任何时间点的状态。
+
+> 你可以从这篇文章[Introducing Event Sourcing](https://msdn.microsoft.com/library/jj591559.aspx)中找到关于该例子的更多信息。
+
+## 相关模式与指导
+
+在实现该模式时，下述模式和指导可能会与之相关：
+
+* [命令和查询责任分离（CQRS）模式](patterns/cqrs.md)。为CQRS的实现提供永久信息源的写存储通常是基于事件溯源模式而实现的。该模式描述了如何通过不同的接口将应用中读取数据与更新数据的操作互相分离。
+* [物化视图模式](patterns/materialized-view.md)。基于事件溯源的系统中所使用的数据存储通常不适于很好地进行高效查询。一种常见的取代方法是在固定时间间隔或者当数据变化时，预先产生一个关于该数据的视图。该模式展示了是如何做到这点的。
+* [事务修正模式](patterns/compensating-transaction.md)。事件溯源存储中已存在的数据是不会被更新的，新事件被源源不断地加入来表示实体状态的最新值。要做一个反向撤销的话，得使用事务修正，因为简单地回退到之前的状态是不可能的。该模式描述了如何撤销之前一个操作所做的工作。
+* [数据一致性入门](https://msdn.microsoft.com/library/dn589800.aspx)。在事件溯源中使用单独的读存储或者物化视图时，读到的数据并不是实时一致的，而仅仅是最终一致的。该入门总结了在分布式数据上维护一致性的相关问题。
+* [数据分区指南](https://msdn.microsoft.com/library/dn589795.aspx)。在使用事件溯源来提高可扩展性、减少冲突和优化性能时，数据通常会被分区。该指南描述了如何将数据划分为离散的分区，以及可能出现的问题。
+* Greg Young的文章[Why use Event Sourcing?](http://codebetter.com/gregyoung/2010/02/20/why-use-event-sourcing/)。
+
