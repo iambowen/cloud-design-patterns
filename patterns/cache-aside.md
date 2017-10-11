@@ -124,10 +124,10 @@ public async Task UpdateEntityAsync(MyEntity entity)
     await this.store.UpdateEntityAsync(entity).ConfigureAwait(false); 
 }
 ```
-### 相关指导
+### 相关指南
 
 下面的内容可能和本模式的实现相关：
 
-[缓存指导](https://docs.microsoft.com/en-us/azure/architecture/best-practices/caching)。介绍了有关如何在云解决方案中缓存数据的额外信息，以及实现缓存时应考虑的问题。
+[缓存指南](https://docs.microsoft.com/en-us/azure/architecture/best-practices/caching)。介绍了有关如何在云解决方案中缓存数据的额外信息，以及实现缓存时应考虑的问题。
 
 [数据一致性入门](https://msdn.microsoft.com/library/dn589800.aspx)。云应用程序通常使用分布在数据存储中的数据。 管理和维护数据一致性是系统的关键，特别是可能出现的并发和可用性问题。该入门介绍了有关分布式数据的一致性的问题，并总结了应用程序如何实现最终的一致性来维护数据的可用性。

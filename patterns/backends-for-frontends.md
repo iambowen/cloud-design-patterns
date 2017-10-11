@@ -49,7 +49,7 @@
 * 当各种界面对后端的请求相同或相似时。
 * 当只有一种界面与后端进行交互时。
 
-## 相关指导
+## 相关指南
 
 * [网关聚合模式](patterns/gateway-aggregation.md)
 * [网关卸载模式](patterns/gateway-offloading.md)

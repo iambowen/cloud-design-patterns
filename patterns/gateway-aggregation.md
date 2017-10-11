@@ -101,7 +101,7 @@ http {
 }
 ```
 
-## 相关指导
+## 相关指南
 
 * [前端专属的后端模式](patterns/backends-for-frontends.md)
 * [网关卸载模式](patterns/gateway-offloading.md)

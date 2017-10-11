@@ -76,7 +76,7 @@ spec:
         cpu: "1"
 ```
 
-### 相关指导
+### 相关指南
 
 * [断路器模式(Circuit Breaker)](patterns/circuit-breaker.md)
 * [为Azure设计弹性的应用](https://docs.microsoft.com/en-us/azure/architecture/resiliency/index)

@@ -63,6 +63,6 @@ Even for applications that don’t provide an extensibility mechanism, you can u
 * 大使挎斗。将[大使服务](patterns/ambassador.html)部署以挎斗形式部署。该应用程序通过大使调用，该大使服务处理日志请求，路由，断路和其它连接相关功能。
 * 卸载代理。将NGINX代理部署在node.js服务实例的前面，处理为服务提供的静态文件内容。
 
-### 相关指导
+### 相关指南
 
 * [大使模式](ambassador.md)

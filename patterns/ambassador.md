@@ -50,6 +50,6 @@
 
 ![](https://docs.microsoft.com/en-us/azure/architecture/patterns/_images/ambassador-example.png)
 
-### 相关指导
+### 相关指南
 
 [挎斗模式]()
