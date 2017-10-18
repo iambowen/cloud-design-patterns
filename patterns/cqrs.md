@@ -30,18 +30,16 @@
 ![](https://docs.microsoft.com/en-us/azure/architecture/patterns/_images/command-and-query-responsibility-segregation-cqrs-separate-stores.png)
 
 读存储可以是写存储的只读副本，或者读写存储可以具有完全不同的结构。使用读取存储的多个只读副本可以大大提高查询性能和应用程序UI响应，特别是在只读副本靠近应用程序实例分布式场景中。某些数据库系统（SQL Server）提供了诸如故障转移副本的附加功能，以最大限度地提高可用性。
-读写存储器的分离也允许每个存储器适当地伸缩以匹配负载。例如，读存储器通常遇到比写入存储器高得多的负载。
-当查询/读取模型包含非规范化数据（请参阅* [物化视图模式](materialized-view.md)）时，为应用程序中的每个视图读取数据或查询系统中的数据时，性能将最大化。
+读写存储器的分离也允许每个存储器适当地伸缩以匹配负载。例如，读存储器通常遇到比写存储器高得多的负载。
+当查询/读模型包含非规范化数据（请参阅* [物化视图模式](materialized-view.md)）时，为应用程序中的每个视图读取数据或查询系统中的数据时，性能将最大化。
 
 ### 问题和注意事项
 
-Consider applying CQRS to limited sections of your system where it will be most valuable.
-A typical approach to deploying eventual consistency is to use event sourcing in conjunction with CQRS so that the write model is an append-only stream of events driven by execution of commands. These events are used to update materialized views that act as the read model. For more information see Event Sourcing and CQRS.
 在决定如何实现此模式时，请考虑以下几点：
 * 将数据存储分为单独的物理存储以进行读写操作可以提高系统的性能和安全性，但它增加弹性和最终一致性的复杂性。必须更新读模型存储以反映对写模型存储的更改，并且难以检测用户何时发出请求基于陈旧数据的读取请求，这样的操作无法完成。
 > 有关最终一致性的描述，请参阅[数据一致性入门](https://msdn.microsoft.com/library/dn589800.aspx)。
 * 考虑将CQRS应用于系统最有价值的部分。
-* 部署最终一致性的典型方法是将事件溯源与CQRS结合使用，写入模型是仅由执行命令驱动的附加事件流。这些事件用于更新充当读取模型的物化视图。更多相关信息，请参阅[事件溯源和CQRS](https://msdn.microsoft.com/library/dn568103.aspx#EventSourcingandCQRS)。
+* 部署最终一致性的典型方法是将事件溯源与CQRS结合使用，写模型是仅由执行命令驱动的附加事件流。这些事件用于更新充当读模型的物化视图。更多相关信息，请参阅[事件溯源和CQRS](https://msdn.microsoft.com/library/dn568103.aspx#EventSourcingandCQRS)。
 
 ## 何时使用该模式
 
@@ -61,18 +59,20 @@ A typical approach to deploying eventual consistency is to use event sourcing in
 
 ## 事件溯源和CQRS
 
-The CQRS pattern is often used along with the Event Sourcing pattern. CQRS-based systems use separate read and write data models, each tailored to relevant tasks and often located in physically separate stores. When used with the Event Sourcing pattern, the store of events is the write model, and is the official source of information. The read model of a CQRS-based system provides materialized views of the data, typically as highly denormalized views. These views are tailored to the interfaces and display requirements of the application, which helps to maximize both display and query performance.
-Using the stream of events as the write store, rather than the actual data at a point in time, avoids update conflicts on a single aggregate and maximizes performance and scalability. The events can be used to asynchronously generate materialized views of the data that are used to populate the read store.
-Because the event store is the official source of information, it is possible to delete the materialized views and replay all past events to create a new representation of the current state when the system evolves, or when the read model must change. The materialized views are in effect a durable read-only cache of the data.
-When using CQRS combined with the Event Sourcing pattern, consider the following:
-As with any system where the write and read stores are separate, systems based on this pattern are only eventually consistent. There will be some delay between the event being generated and the data store being updated.
-The pattern adds complexity because code must be created to initiate and handle events, and assemble or update the appropriate views or objects required by queries or a read model. The complexity of the CQRS pattern when used with the Event Sourcing pattern can make a successful implementation more difficult, and requires a different approach to designing systems. However, event sourcing can make it easier to model the domain, and makes it easier to rebuild views or create new ones because the intent of the changes in the data is preserved.
-Generating materialized views for use in the read model or projections of the data by replaying and handling the events for specific entities or collections of entities can require significant processing time and resource usage. This is especially true if it requires summation or analysis of values over long periods, because all the associated events might need to be examined. Resolve this by implementing snapshots of the data at scheduled intervals, such as a total count of the number of a specific action that have occurred, or the current state of an entity.
+CQRS模式经常与事件溯源模式一起使用。基于CQRS的系统使用单独的读写数据模型，每个模型针对相关任务进行定制，并且通常位于物理上分开的存储中。与事件溯源模式一起使用时，事件存储是写模型，并且是合法的信息来源。基于CQRS的系统的读模型提供了数据的物化视图，通常是高度非规范化的视图。这些视图是针对应用程序的接口和显示要求量身定制的，有助于最大化显示和查询性能。
+使用事件流作为写存储，而不是某个时间点的实际数据，避免了单个聚合的更新冲突，并最大限度地提高了性能和可扩展性。事件可以以异步的方式生成用于填充读存储数据的物化视图。
+由于事件存储是合法的信息来源，因此可以删除物化视图并重播所有过去的事件，以便在系统演进或者读模型必须更改时，创建当前状态的新表示。物化视图实际上是数据持久的只读缓存。
+
+使用CQRS结合事件溯源模式时，请考虑以下几点：
+
+* 与读写存储分离的任何系统一样，基于此模式的系统都是最终一致的。正在生成的事件和正在更新的数据存储之间会有一些延迟。
+* 该模式增加了复杂性，因为必须创建代码来启动和处理事件，并组合或更新查询或读模型所需的适当视图或对象。当采用事件采购模式时，CQRS模式的复杂性导致实现的困难性，同时需要采用不同的方法来设计系统。但是，事件溯源更容易对域进行建模，因为保留了数据更改的意图，更容易地重建视图或创建新的视图，。
+* 通过重放和处理特定实体或实体集合的事件，生成用于读模型或数据预测中的物化视图可能需要大量的时间和资源去处理。尤其是需要长时间的总结或分析值情况下，因为所有相关事件可能都需要检查。解决这个问题需要通过按计划的间隔实现数据的快照，例如已经发生的特定操作的数量的总数或实体的当前状态。
 
 ## 案例
 
-The following code shows some extracts from an example of a CQRS implementation that uses different definitions for the read and the write models. The model interfaces don't dictate any features of the underlying data stores, and they can evolve and be fine-tuned independently because these interfaces are separated.
-The following code shows the read model definition.
+下面的例子是从使用不同定义的读和写模型的CQRS实现中提取出的部分代码。模型接口不规定底层数据存储的任何特性，并且它们可以独立进行演进和调优，因为这些接口是分开的。
+以下代码显示了读模型定义。
 
 ```java
 // Query interface
@@ -104,7 +104,8 @@ namespace ReadModel
   }
 }
 ```
-The system allows users to rate products. The application code does this using the RateProduct command shown in the following code.
+该系统允许用户评价产品。应用程序代码使用代码中的`RateProduct`命令执行此操作。
+
 ```java
 public interface ICommand
 {
@@ -124,7 +125,8 @@ public class RateProduct : ICommand
 }
 ```
 
-The system uses the ProductsCommandHandler class to handle commands sent by the application. Clients typically send commands to the domain through a messaging system such as a queue. The command handler accepts these commands and invokes methods of the domain interface. The granularity of each command is designed to reduce the chance of conflicting requests. The following code shows an outline of the ProductsCommandHandler class.
+系统使用`ProductsCommandHandler`类来处理应用程序发送的命令。客户端通常通过诸如队列的消息系统向域发送命令。命令处理程序接受这些命令并调用域接口的方法。每个命令的粒度旨在减少冲突请求的机会。以下代码显示了`ProductsCommandHandler`类的大概内容。
+
 ```java
 public class ProductsCommandHandler :
     ICommandHandler<AddNewProduct>,
@@ -171,8 +173,8 @@ public class ProductsCommandHandler :
   }
 }
 ```
-The following code shows the IProductsDomain interface from the write model.
 
+以下代码展示了写模型中的`IProductsDomain`接口。
 ```java
 public interface IProductsDomain
 {
@@ -183,16 +185,17 @@ public interface IProductsDomain
   void UpdateStockFromInventoryRecount(int productId, int updatedQuantity);
 }
 ```
-Also notice how the IProductsDomain interface contains methods that have a meaning in the domain. Typically, in a CRUD environment these methods would have generic names such as Save or Update, and have a DTO as the only argument. The CQRS approach can be designed to meet the needs of this organization's business and inventory management systems.
+
+还要注意`IProductsDomain`接口是如何包含域中含义的方法。通常，在CRUD环境中，这些方法具有通用名称，例如Save或者Update，并将DTO作为唯一的参数。CQRS方法可以设计为满足本组织业务和目录管理系统的需求。
 
 ## 相关模式和指南
 
-The following patterns and guidance are useful when implementing this pattern:
-For a comparison of CQRS with other architectural styles, see Architecture styles and CQRS architecture style.
-Data Consistency Primer. Explains the issues that are typically encountered due to eventual consistency between the read and write data stores when using the CQRS pattern, and how these issues can be resolved.
-Data Partitioning Guidance. Describes how the read and write data stores used in the CQRS pattern can be divided into partitions that can be managed and accessed separately to improve scalability, reduce contention, and optimize performance.
-Event Sourcing Pattern. Describes in more detail how Event Sourcing can be used with the CQRS pattern to simplify tasks in complex domains while improving performance, scalability, and responsiveness. As well as how to provide consistency for transactional data while maintaining full audit trails and history that can enable compensating actions.
-Materialized View Pattern. The read model of a CQRS implementation can contain materialized views of the write model data, or the read model can be used to generate materialized views.
-The patterns & practices guide CQRS Journey. In particular, Introducing the Command Query Responsibility Segregation Pattern explores the pattern and when it's useful, and Epilogue: Lessons Learned helps you understand some of the issues that come up when using this pattern.
-The post CQRS by Martin Fowler, which explains the basics of the pattern and links to other useful resources.
-Greg Young’s posts, which explore many aspects of the CQRS pattern.
+以下模式和指南在实现此模式时很有用：
+* 对于CQR​​S与其它架构风格的比较，请参见[架构风格]()和[CQRS架构风格](https://docs.microsoft.com/en-us/azure/architecture/guide/architecture-styles/cqrs)。
+* [数据一致性入门](https://msdn.microsoft.com/library/dn589800.aspx)介绍了在使用CQRS模式时读写数据存储之间的最终一致性，以及这些问题如何解决，常见问题等。
+* [数据分区指南](https://msdn.microsoft.com/library/dn589795.aspx)。介绍如何将CQRS模式中使用的读写数据存储区划分为可以单独管理和访问的分区，以提高可扩展性，减少争用并优化性能。
+* [事件溯源模式](event-sourcing.md)。更详细地介绍了如何使用CQRS模式来实现事件溯源，以简化复杂域中的任务，同时提高性能，可扩展性和响应能力。以及如何为事务提供数据一致性，同时保持完整的审计跟踪和历史，实现补偿措施。
+* [物化视图模式](materialized-view.md)。CQRS实现的读模型可以包含写模型数据的物化视图，或者可以使用读模型来生成物化视图。
+* 模式与实践指南的[CQRS之旅](http://aka.ms/cqrs)。特别介绍了[命令查询责任分离模式](https://msdn.microsoft.com/library/jj591573.aspx)，以及这种模式何时有用，[结语：经验教训](https://msdn.microsoft.com/library/jj591568.aspx)部分可帮助你了解使用此模式时出现的一些问题。
+* [Martin Fowler关于CQRS的博客](http://martinfowler.com/bliki/CQRS.html)，解释了模式的基础知识和与其它有用资源的链接。
+* [Greg Young的博客](http://codebetter.com/gregyoung/)，探讨了CQRS模式。
