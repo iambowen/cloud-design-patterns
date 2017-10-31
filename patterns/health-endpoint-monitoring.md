@@ -154,7 +154,6 @@ Azure应用程序中监视端点的选项有：
 取决于应用程序的托管机制（如Web站点，云服务，虚拟机或移动服务），监控条件各不相同，但这些都拥有在服务的设置中指定创建使用Web端点的警报规则的功能。端点应及时响应，以使警报系统能够检测到应用程序正常运行。
 阅读更多有关[创建警报](https://azure.microsoft.com/documentation/articles/insights-receive-alert-notifications/)通知的信息。
 
-Read more information about using Traffic Manager to monitor your applications. Traffic Manager is also discussed in Multiple Datacenter Deployment Guidance.
 如果你在Azure Cloud Services Web和工作角色或虚拟机中托管应用程序，可以利用Azure中的一种内置服务（称为流量管理器）。流量管理器是路由和负载平衡服务，可以根据一系列规则和设置将请求分发到云服务托管应用程序的特定实例。
 除了路由请求之外，流量管理器会定期ping指定的URL，端口和相对路径，以确定其规则中定义的应用程序的哪些实例是活动的并且响应请求。如果检测到状态代码200（OK），它将应用程序标记为可用。任何其它状态代码都会导致流量管理器将应用程序标记为离线。你可以在流量管理器控制台中查看状态，并配置规则将请求重新路由到正在响应的应用程序的其它实例。
 但是，流量管理器只会等待十秒钟从监控URL接收到响应。因此，应该确保在此时间内执行健康验证码，从而允许从流量管理器往返应用程序的网络延迟。
