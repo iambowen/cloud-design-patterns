@@ -18,23 +18,31 @@
 
 ## 解决方案
 
-If the data store doesn't support secondary indexes, you can emulate them manually by creating your own index tables. An index table organizes the data by a specified key. Three strategies are commonly used for structuring an index table, depending on the number of secondary indexes that are required and the nature of the queries that an application performs.
+如果数据存储不支持二级索引，可以通过创建自己的索引表来手动模拟。索引表通过特定的键组织数据。通常使用三种策略来构造索引表，具体取决于所需的二级索引的数量以及应用程序执行的查询的性质。
 
-The first strategy is to duplicate the data in each index table but organize it by different keys (complete denormalization). The next figure shows index tables that organize the same customer information by Town and LastName.
+第一个策略是复制每个索引表中的数据，但是通过不同的键进行组织（完全非规范化）。下图显示了通过Town和LastName组织相同客户信息的索引表。
+![](https://docs.microsoft.com/en-us/azure/architecture/patterns/_images/index-table-figure-2.png)
 
-Figure 2 - Data is duplicated in each index table
-This strategy is appropriate if the data is relatively static compared to the number of times it's queried using each key. If the data is more dynamic, the processing overhead of maintaining each index table becomes too large for this approach to be useful. Also, if the volume of data is very large, the amount of space required to store the duplicate data is significant.
-The second strategy is to create normalized index tables organized by different keys and reference the original data by using the primary key rather than duplicating it, as shown in the following figure. The original data is called a fact table.
-Figure 3 - Data is referenced by each index table
-This technique saves space and reduces the overhead of maintaining duplicate data. The disadvantage is that an application has to perform two lookup operations to find data using a secondary key. It has to find the primary key for the data in the index table, and then use the primary key to look up the data in the fact table.
-The third strategy is to create partially normalized index tables organized by different keys that duplicate frequently retrieved fields. Reference the fact table to access less frequently accessed fields. The next figure shows how commonly accessed data is duplicated in each index table.
-Figure 4 - Commonly accessed data is duplicated in each index table
-With this strategy, you can strike a balance between the first two approaches. The data for common queries can be retrieved quickly by using a single lookup, while the space and maintenance overhead isn't as significant as duplicating the entire data set.
+该策略适于数据与使用每个键查询的次数相比是相对静态的场景。如果数据更具动态性，则维护每个索引表的处理开销变得太大，不适于使用。此外，如果数据量非常大，则存储重复数据所需的空间量很大。
+第二种策略是创建由不同键组织的归一化索引表，并使用主键而不是复制原始数据，如下图所示。 原始数据称为事实表。
+![](https://docs.microsoft.com/en-us/azure/architecture/patterns/_images/index-table-figure-3.png)
+
+这种技术可节省空间并减少维护重复数据的开销。缺点是应用程序必须执行两次查找操作以使用二级键查找数据。必须在索引表中找到数据的主键，然后使用主键查找事实表中的数据。
+第三种策略是创建通过重复频繁检索的字段的不同键组织的部分归一化索引表。参考事实表来访问访问频度较低的字段。下图显示了频繁访问的数据是如何复制到每个索引表的。
+
+![](https://docs.microsoft.com/en-us/azure/architecture/patterns/_images/index-table-figure-4.png)
+
 If an application frequently queries data by specifying a combination of values (for example, “Find all customers that live in Redmond and that have a last name of Smith”), you could implement the keys to the items in the index table as a concatenation of the Town attribute and the LastName attribute. The next figure shows an index table based on composite keys. The keys are sorted by Town, and then by LastName for records that have the same value for Town.
-Figure 5 - An index table based on composite keys
-Index tables can speed up query operations over sharded data, and are especially useful where the shard key is hashed. The next figure shows an example where the shard key is a hash of the Customer ID. The index table can organize data by the nonhashed value (Town and LastName), and provide the hashed shard key as the lookup data. This can save the application from repeatedly calculating hash keys (an expensive operation) if it needs to retrieve data that falls within a range, or it needs to fetch data in order of the nonhashed key. For example, a query such as “Find all customers that live in Redmond” can be quickly resolved by locating the matching items in the index table, where they're all stored in a contiguous block. Then, follow the references to the customer data using the shard keys stored in the index table.
-Figure 6 - An index table providing quick lookup for sharded data
-Issues and considerations
+这一策略可以在前两种方法之间取得平衡。普通查询的数据可以通过使用单个查找快速检索，而空间和维护开销没有复制整个数据集大。
+
+如果应用程序经常通过指定组合值来查询数据（例如，“查找居住在Redmond的所有客户，姓氏为Smith”），则可以将索引表中的项目的键实现为级联的Town属性和LastName属性。下图展示了基于复合键的索引表。键按Town排序，然后按Town值相同的LastName排序。
+![](https://docs.microsoft.com/en-us/azure/architecture/patterns/_images/index-table-figure-5.png)
+This can save the application from repeatedly calculating hash keys (an expensive operation) if it needs to retrieve data that falls within a range, or it needs to fetch data in order of the nonhashed key. For example, a query such as “Find all customers that live in Redmond” can be quickly resolved by locating the matching items in the index table, where they're all stored in a contiguous block. Then, follow the references to the customer data using the shard keys stored in the index table.
+索引表可以加快对分片数据的查询操作，并且在碎片密钥散列时特别有用。下图中的例子分片键是Customer ID的哈希值。索引表可以通过非标记值（Town和LastName）组织数据，并提供散列分片键作为查找数据。如果需要检索落在一个范围内的数据，或者按照非散列键的顺序获取数据取，则可以避免应用程序重复计算散列键（昂贵的操作）。例如，可以通过在索引表中找到匹配的项目，将它们全部存储在连续的块中来快速解决诸如“查找居住在Redmond的所有客户”之类的查询。 然后，使用存储在索引表中的分片键，跟随客户数据的引用。
+![](https://docs.microsoft.com/en-us/azure/architecture/patterns/_images/index-table-figure-6.png)
+
+## 问题和注意事项
+
 Consider the following points when deciding how to implement this pattern:
 The overhead of maintaining secondary indexes can be significant. You must analyze and understand the queries that your application uses. Only create index tables when they're likely to be used regularly. Don't create speculative index tables to support queries that an application doesn't perform, or performs only occasionally.
 Duplicating data in an index table can add significant overhead in storage costs and the effort required to maintain multiple copies of data.
