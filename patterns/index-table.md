@@ -32,40 +32,50 @@
 
 ![](https://docs.microsoft.com/en-us/azure/architecture/patterns/_images/index-table-figure-4.png)
 
-If an application frequently queries data by specifying a combination of values (for example, “Find all customers that live in Redmond and that have a last name of Smith”), you could implement the keys to the items in the index table as a concatenation of the Town attribute and the LastName attribute. The next figure shows an index table based on composite keys. The keys are sorted by Town, and then by LastName for records that have the same value for Town.
 这一策略可以在前两种方法之间取得平衡。普通查询的数据可以通过使用单个查找快速检索，而空间和维护开销没有复制整个数据集大。
 
 如果应用程序经常通过指定组合值来查询数据（例如，“查找居住在Redmond的所有客户，姓氏为Smith”），则可以将索引表中的项目的键实现为级联的Town属性和LastName属性。下图展示了基于复合键的索引表。键按Town排序，然后按Town值相同的LastName排序。
 ![](https://docs.microsoft.com/en-us/azure/architecture/patterns/_images/index-table-figure-5.png)
-This can save the application from repeatedly calculating hash keys (an expensive operation) if it needs to retrieve data that falls within a range, or it needs to fetch data in order of the nonhashed key. For example, a query such as “Find all customers that live in Redmond” can be quickly resolved by locating the matching items in the index table, where they're all stored in a contiguous block. Then, follow the references to the customer data using the shard keys stored in the index table.
+
 索引表可以加快对分片数据的查询操作，并且在碎片密钥散列时特别有用。下图中的例子分片键是Customer ID的哈希值。索引表可以通过非标记值（Town和LastName）组织数据，并提供散列分片键作为查找数据。如果需要检索落在一个范围内的数据，或者按照非散列键的顺序获取数据取，则可以避免应用程序重复计算散列键（昂贵的操作）。例如，可以通过在索引表中找到匹配的项目，将它们全部存储在连续的块中来快速解决诸如“查找居住在Redmond的所有客户”之类的查询。 然后，使用存储在索引表中的分片键，跟随客户数据的引用。
 ![](https://docs.microsoft.com/en-us/azure/architecture/patterns/_images/index-table-figure-6.png)
 
 ## 问题和注意事项
 
-Consider the following points when deciding how to implement this pattern:
-The overhead of maintaining secondary indexes can be significant. You must analyze and understand the queries that your application uses. Only create index tables when they're likely to be used regularly. Don't create speculative index tables to support queries that an application doesn't perform, or performs only occasionally.
-Duplicating data in an index table can add significant overhead in storage costs and the effort required to maintain multiple copies of data.
-Implementing an index table as a normalized structure that references the original data requires an application to perform two lookup operations to find data. The first operation searches the index table to retrieve the primary key, and the second uses the primary key to fetch the data.
-If a system incorporates a number of index tables over very large data sets, it can be difficult to maintain consistency between index tables and the original data. It might be possible to design the application around the eventual consistency model. For example, to insert, update, or delete data, an application could post a message to a queue and let a separate task perform the operation and maintain the index tables that reference this data asynchronously. For more information about implementing eventual consistency, see the Data Consistency Primer.
-Microsoft Azure storage tables support transactional updates for changes made to data held in the same partition (referred to as entity group transactions). If you can store the data for a fact table and one or more index tables in the same partition, you can use this feature to help ensure consistency.
-Index tables might themselves be partitioned or sharded.
-When to use this pattern
-Use this pattern to improve query performance when an application frequently needs to retrieve data by using a key other than the primary (or shard) key.
-This pattern might not be useful when:
-Data is volatile. An index table can become out of date very quickly, making it ineffective or making the overhead of maintaining the index table greater than any savings made by using it.
-A field selected as the secondary key for an index table is nondiscriminating and can only have a small set of values (for example, gender).
-The balance of the data values for a field selected as the secondary key for an index table are highly skewed. For example, if 90% of the records contain the same value in a field, then creating and maintaining an index table to look up data based on this field might create more overhead than scanning sequentially through the data. However, if queries very frequently target values that lie in the remaining 10%, this index can be useful. You should understand the queries that your application is performing, and how frequently they're performed.
-Example
-Azure storage tables provide a highly scalable key/value data store for applications running in the cloud. Applications store and retrieve data values by specifying a key. The data values can contain multiple fields, but the structure of a data item is opaque to table storage, which simply handles a data item as an array of bytes.
-Azure storage tables also support sharding. The sharding key includes two elements, a partition key and a row key. Items that have the same partition key are stored in the same partition (shard), and the items are stored in row key order within a shard. Table storage is optimized for performing queries that fetch data falling within a contiguous range of row key values within a partition. If you're building cloud applications that store information in Azure tables, you should structure your data with this feature in mind.
-For example, consider an application that stores information about movies. The application frequently queries movies by genre (action, documentary, historical, comedy, drama, and so on). You could create an Azure table with partitions for each genre by using the genre as the partition key, and specifying the movie name as the row key, as shown in the next figure.
-Figure 7 - Movie data stored in an Azure table
-This approach is less effective if the application also needs to query movies by starring actor. In this case, you can create a separate Azure table that acts as an index table. The partition key is the actor and the row key is the movie name. The data for each actor will be stored in separate partitions. If a movie stars more than one actor, the same movie will occur in multiple partitions.
-You can duplicate the movie data in the values held by each partition by adopting the first approach described in the Solution section above. However, it's likely that each movie will be replicated several times (once for each actor), so it might be more efficient to partially denormalize the data to support the most common queries (such as the names of the other actors) and enable an application to retrieve any remaining details by including the partition key necessary to find the complete information in the genre partitions. This approach is described by the third option in the Solution section. The next figure shows this approach.
-Figure 8 - Actor partitions acting as index tables for movie data
-Related patterns and guidance
-The following patterns and guidance might also be relevant when implementing this pattern:
-Data Consistency Primer. An index table must be maintained as the data that it indexes changes. In the cloud, it might not be possible or appropriate to perform operations that update an index as part of the same transaction that modifies the data. In that case, an eventually consistent approach is more suitable. Provides information on the issues surrounding eventual consistency.
-Sharding pattern. The Index Table pattern is frequently used in conjunction with data partitioned by using shards. The Sharding pattern provides more information on how to divide a data store into a set of shards.
-Materialized View pattern. Instead of indexing data to support queries that summarize data, it might be more appropriate to create a materialized view of the data. Describes how to support efficient summary queries by generating prepopulated views over data.
+实现此模式时，请考虑以下几点：
+* 维持二级索引的开销可能很大。必须分析和了解应用程序使用的查询。只有在经常使用时才能创建索引表。不要创建推测索引表来支持应用程序不执行或仅偶尔执行的查询。
+* 在索引表中复制数据可能会增加存储成本巨大开销和维护多份数据副本的工作量。
+* 用引用原始数据的规范化结构实现索引表要求应用程序执行两次查找操作找到数据。第一个操作搜索索引表以检索主键，第二个操作使用主键来获取数据。
+* 如果系统在非常大的数据集中包含多个索引表，则很难在索引表与原始数据之间保持一致性。可能围绕最终一致性模型设计应用程序。例如，要插入，更新或删除数据，应用程序可以将消息发布到队列，并让单独的任务执行操作并维护异步引用此数据的索引表。有关实现最终一致性的更多信息，请参阅[数据一致性入门](https://msdn.microsoft.com/library/dn589800.aspx)。
+> 微软Azure存储表支持对同一分区（又称实体组事务）中保存的数据所做更改的事务更新。如果可以将事实表和一个或多个索引表的数据存储在同一分区中，则可以使用此功能来确保一致性。
+* 索引表本身可能分区或分片。
+
+## 何时使用该模式
+
+当应用程序经常需要使用除主（或分片）键之外的键来检索数据时，使用此模式可以提高查询性能。
+此模式可能不适于以下场景：
+
+* 数据不稳定。索引表可能很快过时，使其无效或使维护索引表的开销大于使用索引表所节省的成本。
+* 索引表选择的二级索引字段无差别，只能具有一小组值（例如，性别）。
+* 索引表的二级键选择的字段的数据值的平衡偏差较高。例如，如果90％的记录在字段中包含相同的值，则创建和维护索引表，根据此字段查找数据可能会比依次扫描数据开销更大。但是，如果查询频繁访问的目标值位于剩余的10％中，该索引可能是有用的。应该了解应用程序执行的查询以及执行的频率。
+
+## 案例
+Azure存储表为在云中运行的应用程序提供了高度可扩展的键/值数据存储。应用程序通过指定键来存储和检索数据值。数据值可以包含多个字段，但数据项的结构对表存储是不透明的，它只是将数据项作为字节数组处理。
+
+Azure存储表还支持分片。分片键包括两个元素，分区键和行键。具有相同分区键的项目存储在相同的分区（分片）中，并且项目以分片中的行键顺序存储。优化表存储用于执行查询，以获取落在分区内的行键值的连续范围内的数据。如果构建的应用程序正在使用Azure表存储信息，应考虑使用此功能来构建数据。
+
+例如，存储有关电影的信息的应用程序。应用程序经常根据类型（动作，纪录片，历史，喜剧，戏剧等）查询电影。可以通过使用类型作为分区键为每个类型创建一个具有分区的Azure表，并将电影名称指定为行键，如下图所示。
+
+![](https://docs.microsoft.com/en-us/azure/architecture/patterns/_images/index-table-figure-7.png)
+
+如果应用程序还需要通过主演查询电影，使用这种方法效果较差。在这种情况下，可以创建一个独立的Azure表作为索引表。分区键是演员，行键是电影名称。每个演员的数据将存储在不同的分区中。如果电影有超过一个电影明星，同一部电影将出现在多个分区中。
+可以通过采用上面“解决方案”部分中描述的第一种方法，复制每个分区所保存的值中的电影数据。然而，每个电影很可能复制好几次（每个演员一次），所以可能会更有效地将数据反规范化以支持最常见的查询（例如其他演员的名称），并使应用程序通过包括在类型分区中找到完整信息所必需的分区键来检索任何剩余的详细内容。此方法为“解决方案”部分中的第三个策略。下图展示了这种方法。
+![](https://docs.microsoft.com/en-us/azure/architecture/patterns/_images/index-table-figure-8.png)
+
+## 相关模式和指南
+
+以下模式和指南在实现此模式时也可能相关：
+* [数据一致性入门](https://msdn.microsoft.com/library/dn589800.aspx)。索引表必须在数据更改时同步其索引。在云中，将执行更新索引的操作作为修改数据的相同事务不太可能也不合适。在这种情况下，采用最终一致更为合适。文章提供了有关最终一致性问题的相关内容。
+可能作为修改数据的相同事务的部分
+* [分片模式](sharding.md)。索引表模式经常与使用分片分割的数据结合使用。分片模式提供了有关如何将数据存储分成一组分片的相关内容。
+* [物化视图模式](materialized-view.md)。相比索引数据来支持汇总数据的查询，可能创建数据的物化视图更合适。物化视图模式中介绍了如何通过在数据上生成预填充视图来支持高效的汇总查询。
