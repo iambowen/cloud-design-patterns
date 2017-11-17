@@ -31,7 +31,7 @@
 * [网关路由模式(Gateway Routing)](patterns/gateway-routing.md)
 * [健康端点监控模式(Health Endpoint Monitoring)](patterns/health-endpoint-monitoring.md)
 * [索引表模式(Index Table)](patterns/index-table.md)
-* [选举模式(Leader Election)](patterns/leader-election.md)
+* [领导者模式(Leader Election)](patterns/leader-election.md)
 * [物化视图模式(Materialized View)](patterns/materialized-view.md)
 * [管道和过滤器模式(Pipes and Filters)](patterns/pipes-and-filters.md)
 * [优先级队列模式(Priority Queue)](patterns/priority-queue.md)
