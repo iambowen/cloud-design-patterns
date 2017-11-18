@@ -138,7 +138,7 @@ private void OptionsOnExceptionReceived(object sender,
 
 以下模式和指南在实施这种模式时可能是相关的：
 * [异步消息入门](https://msdn.microsoft.com/library/dn589781.aspx)。消息队列是一种异步通信机制。如果消费者服务需要向应用程序发送回复，则可能需要实现某种形式的回复消息。异步消息入门介绍了如何使用消息队列实现请求/回复消息的信息。
-* [自动缩放指导](https://msdn.microsoft.com/library/dn589774.aspx)。队列应用程序发布消息的长度各不相同，可能启动和停止消费者服务的实例。自动缩放可以帮助在峰值处理期间保持吞吐量。
+* [自动缩放指南](https://msdn.microsoft.com/library/dn589774.aspx)。队列应用程序发布消息的长度各不相同，可能启动和停止消费者服务的实例。自动缩放可以帮助在峰值处理期间保持吞吐量。
 * [计算资源合并模式](compute-resource-consolidation.md)。存在将消费者服务的多个实例合并到单个进程中以降低成本和管理开销的可能性。计算资源合并模式介绍了遵循这种方法的好处和权衡。
 * [基于队列的负载均衡模式](queue-based-load-leveling.md)。引入消息队列可以为系统增加弹性，使服务实例能够处理来自应用程序实例的大量不同的请求。消息队列充当缓冲区，负载均衡。基于队列的负载均衡模式更详细地描述了这种情况。
 * 和该模式相关的一个[示例应用程序](https://github.com/mspnp/cloud-design-patterns/tree/master/competing-consumers)。
