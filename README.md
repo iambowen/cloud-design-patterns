@@ -9,5 +9,5 @@
 
 ## 贡献者
 
-[iambowen@github](https://github.com/iambowen/)
-[@tongzh](https://github.com/tongzh)
+* [iambowen@github](https://github.com/iambowen/), [boweniam@twitter](https://twitter.com/boweniam)
+* [@tongzh](https://github.com/tongzh)
