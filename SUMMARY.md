@@ -41,6 +41,6 @@
 * [分片模式(Sharding)](patterns/sharding.md)
 * [挎斗模式(Sidecar)](patterns/sidecar.md)
 * [静态内容托管模式(Static Content Hosting)](patterns/static-content-hosting.md)
-* [绞杀者模式(Strangler)](patterns/stangler.md)
+* [绞杀者模式(Strangler)](patterns/strangler.md)
 * [限流模式(Throttling)](patterns/throttling.md)
 * [随从钥匙模式？(Valet Key)](patterns/valet-key.md)
