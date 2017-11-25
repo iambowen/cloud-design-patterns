@@ -43,4 +43,4 @@
 * [静态内容托管模式(Static Content Hosting)](patterns/static-content-hosting.md)
 * [绞杀者模式(Strangler)](patterns/strangler.md)
 * [限流模式(Throttling)](patterns/throttling.md)
-* [随从钥匙模式？(Valet Key)](patterns/valet-key.md)
+* [代客钥匙模式(Valet Key)](patterns/valet-key.md)
