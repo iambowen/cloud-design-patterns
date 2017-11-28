@@ -3,7 +3,6 @@
 * [引言](README.md)
 * [微软Azure架构中心](https://docs.microsoft.com/en-us/azure/architecture/)
 * [云设计模式(Cloud Design Patterns)](cloud-design-patterns.md)
-* [模式分类](categories.md)
     * [可用性模式(Availability)](categories/availability.md)
     * [数据管理模式(Data management)](categories/data-management.md)
     * [设计实现模式(Design and implementation)](categories/design-and-implementation.md)
