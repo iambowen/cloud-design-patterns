@@ -21,3 +21,8 @@ Azure云计算团队从可用性、数据管理、设计与实现、消息、管
 * [iambowen@github](https://github.com/iambowen/), [boweniam@twitter](https://twitter.com/boweniam)
 * [@tongzh](https://github.com/tongzh)
 * [@wldandan](https://github.com/wldandan)
+
+
+## 在本地启动
+
+gitbook在国内的访问不是很稳定，我们可以选择从github clone代码: `https://github.com/iambowen/cloud-design-patterns`。在本地安装`gitbook-cli`- `npm install -g gitbook-cli`，然后用命令 `gitbook serve && open localhost:4000`打开该电子书。
