@@ -19,7 +19,7 @@
 * [断路器模式(Circuit Breaker)](patterns/circuit-breaker.md)
 * [命令和查询责任分离模式(CQRS)](patterns/cqrs.md)
 * [事务补偿模式(Compensating Transaction)](patterns/compensating-transaction.md)
-* [竞争消费者模式(Competing Consumers)](patterns/competing-consumers.md)
+* [竞争消费者模式(Competing Consumers)](patterns/competing-consumer.md)
 * [计算资源整合模式(Compute Resource Consolidation)](patterns/compute-resource-consolidation.md)
 * [事件溯源模式(Event Sourcing)](patterns/event-sourcing.md)
 * [外部配置存储(External Configuration Store)](patterns/external-configuration-store.md)
