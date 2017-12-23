@@ -22,8 +22,6 @@
 
 挎斗模式的优点：
 
-Even for applications that don’t provide an extensibility mechanism, you can use a sidecar to extend functionality by attaching it as own process in the same host or sub-container as the primary application.
-
 * 挎斗在运行时环境和编程语言方面独立于其主要应用，因此不需要用每种语言开发一个挎斗。
 * 挎斗可以访问与主应用程序相同的资源。例如，挎斗可以监视挎斗和主应用程序使用的系统资源。
 * 由于与主要应用程序相邻，它们之间的通信没有明显的延迟。
