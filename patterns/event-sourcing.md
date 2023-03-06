@@ -12,7 +12,7 @@
 * 在一个由多个用户并发操作的领域中，数据更新更有可能会起冲突，因为更新操作发生在同一条单独的数据项上。
 * 除非在某个单独的日志中存在额外的审计机制来记录每个操作的细节，否则历史记录会丢失。
 
-> 关于对CRUD方法局限性的更深入了解，见[CRUD, Only When You Can Afford It](https://msdn.microsoft.com/library/ms978509.aspx)。
+> 关于对CRUD方法局限性的更深入了解，见[CRUD, Only When You Can Afford It](https://learn.microsoft.com/zh-cn/archive/blogs/maarten_mullender/crud-only-when-you-can-afford-it-revisited)。
 
 ## 解决方案
 
